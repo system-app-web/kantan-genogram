@@ -261,7 +261,7 @@ header h1 {
   box-shadow: 0 8px 18px rgba(46, 116, 132, 0.18), inset 0 0 0 1px rgba(91, 164, 207, 0.16);
   white-space: nowrap;
   backdrop-filter: blur(8px);
-  animation: templateGuideBounce 1.2s ease-in-out infinite;
+  animation: templateGuideBounce 1.2s ease-in-out 15;
 }
 .template-hero-cta::after {
   content: "";
@@ -275,6 +275,9 @@ header h1 {
   border-bottom: 1px solid rgba(255, 255, 255, 0.86);
   box-shadow: inset -1px -1px 0 rgba(91, 164, 207, 0.12);
   transform: rotate(45deg);
+}
+.template-block.tpl-open .template-hero-cta {
+  display: none;
 }
 .template-hero-label {
   font-size: 18px;
@@ -316,6 +319,33 @@ header h1 {
   border-bottom: 3px solid #ffffff;
   transform: rotate(45deg);
 }
+.template-panel-body {
+  padding: 0 10px 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+.template-panel-guide {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  margin-top: 12px;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  color: #2e7181;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: inset 0 0 0 1px rgba(91, 164, 207, 0.18);
+  backdrop-filter: blur(5px);
+  white-space: nowrap;
+  animation: templateGuideSideBounce 1.2s ease-in-out 15;
+}
 @keyframes templatePulse {
   0%, 100% { box-shadow: 0 8px 22px rgba(91, 164, 207, 0.26), 0 0 0 3px rgba(91, 164, 207, 0.12); }
   50% { box-shadow: 0 10px 27px rgba(91, 164, 207, 0.32), 0 0 0 7px rgba(91, 164, 207, 0.17); }
@@ -324,9 +354,15 @@ header h1 {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-5px); }
 }
+@keyframes templateGuideSideBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-5px); }
+}
 @media (prefers-reduced-motion: reduce) {
   .template-hero-btn,
-  .template-hero-cta { animation: none; }
+  .template-hero-cta,
+  .template-panel-guide,
+  .canvas-edit-guide { animation: none; }
 }
 .save-tpl-btn:hover { background:#d4eaff !important; border-color:#8ab8e0 !important; color:#2a5a8a !important; }
 .drag-handle { cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='white' stroke='%23555' stroke-width='1.5' stroke-linejoin='round' d='M9 3a1 1 0 0 1 1 1v4a1 1 0 0 1 1-1h.5a1 1 0 0 1 1 1v.5a1 1 0 0 1 1-1H14a1 1 0 0 1 1 1v.5a1 1 0 0 1 1-1h.5a1 1 0 0 1 1 1V14a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5V4a1 1 0 0 1 1-1z'/%3E%3C/svg%3E") 9 0, grab; color:#ccc; font-size:11px; line-height:1; user-select:none; flex-shrink:0; position:absolute; left:0; top:10px; height:22px; display:flex; align-items:center; padding:0 1px; }
@@ -371,8 +407,11 @@ header h1 {
   position: relative;
   overflow: hidden;
   background-color: #fff;
+  isolation: isolate;
 }
 #svg-main {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   display: block;
@@ -391,6 +430,38 @@ header h1 {
 }
 .canvas-hint .icon { font-size: 52px; margin-bottom: 12px; opacity: 0.5; }
 .canvas-hint .txt { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.canvas-edit-guide {
+  position: absolute;
+  bottom: 28px;
+  left: 9px;
+  z-index: 3000;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 8px 5px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #2e7181;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(91, 164, 207, 0.22);
+  box-shadow: 0 6px 14px rgba(46, 113, 129, 0.14);
+  white-space: nowrap;
+  pointer-events: none;
+  animation: canvasEditGuideBounce 1.2s ease-in-out 15;
+}
+.template-panel-guide,
+.canvas-edit-guide {
+  display: none;
+}
+.template-block.tpl-open .template-panel-guide,
+body.template-selected .canvas-edit-guide {
+  display: flex;
+}
+@keyframes canvasEditGuideBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-5px); }
+}
 
 /* ── Legend ── */
 .legend {
@@ -504,6 +575,8 @@ header h1 {
   .template-hero-label { font-size: 16px; letter-spacing: 0; }
   .template-hero-sub { font-size: 11px; }
   .template-hero-note { margin-left: 6px; padding: 2px 6px 3px; font-size: 9px; }
+  .template-panel-body { gap: 5px; padding-right: 7px; }
+  .template-panel-guide { font-size: 10px; padding: 6px 4px; }
   .template-hero-arrow { display: none; }
 }
 </style>
@@ -520,7 +593,7 @@ header h1 {
 <div class="main">
   <!-- Input panel -->
   <div class="input-panel">
-    <div style="background:#eef6ff;border-bottom:2px solid #5BA4CF;">
+    <div id="templateBlock" class="template-block" style="background:#eef6ff;border-bottom:2px solid #5BA4CF;">
       <div onclick="toggleTemplatePanel()" class="template-hero-btn">
         <span class="template-hero-cta">まずここをクリック👇</span>
         <span style="display:flex;flex-direction:column;align-items:flex-start;gap:0;">
@@ -532,8 +605,9 @@ header h1 {
         <span id="tpl-arrow" class="template-hero-arrow"></span>
       </div>
       <div id="tpl-panel" style="overflow:hidden;max-height:0;transition:max-height 0.3s ease,padding 0.3s;">
-        <div style="padding:0 10px 8px;display:flex;flex-direction:column;gap:6px;">
-          <div id="template-btns" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+        <div class="template-panel-body">
+          <div id="template-btns" style="display:flex;flex-wrap:wrap;gap:4px;flex:1;align-content:flex-start"></div>
+          <div class="template-panel-guide">ここから選んで👈</div>
         </div>
       </div>
     </div>
@@ -549,6 +623,7 @@ header h1 {
   <!-- Canvas -->
   <div class="canvas-wrap" id="canvasWrap">
     <button onclick="saveTemplate()" style="position:absolute;bottom:50px;left:50%;transform:translateX(-50%);z-index:20;padding:8px 20px;border:none;border-radius:999px;background:rgba(91,164,207,0.15);color:#2a6a9a;font-size:13px;font-weight:600;cursor:pointer;backdrop-filter:blur(4px);transition:all 0.2s;letter-spacing:0.4px;" onmouseover="this.style.background='rgba(91,164,207,0.3)'" onmouseout="this.style.background='rgba(91,164,207,0.15)'">＋ テンプレートに追加</button>
+    <div class="canvas-edit-guide">こちらで編集👈</div>
     <div class="canvas-hint" id="canvasHint">
 <div class="txt">左パネルのテンプレート選択<br>または家族を追加で自動反映されます</div>
     </div>
@@ -886,8 +961,14 @@ function getSavedTemplates() {
 
 function toggleTemplatePanel() {
   const panel = document.getElementById('tpl-panel');
+  const block = document.getElementById('templateBlock');
   const isOpen = panel.style.maxHeight !== '0px' && panel.style.maxHeight !== '';
   panel.style.maxHeight = isOpen ? '0' : panel.scrollHeight + 'px';
+  if (block) block.classList.toggle('tpl-open', !isOpen);
+}
+
+function setTemplateSelectedGuide(show) {
+  document.body.classList.toggle('template-selected', !!show);
 }
 
 function renderTemplateBtns() {
@@ -902,9 +983,9 @@ function renderTemplateBtns() {
     btn.onclick = () => {
       const isSelected = btn.dataset.selected === '1';
       document.querySelectorAll('.preset-btn').forEach(b => { b.style.background='#f0f6ff'; b.style.boxShadow='none'; b.dataset.selected=''; });
-      if (isSelected) { pid=1; persons=[mkPerson('本人','male')]; renderList(); scheduleAutoGenerate({ immediate: true }); return; }
+      if (isSelected) { pid=1; persons=[mkPerson('本人','male')]; renderList(); setTemplateSelectedGuide(false); scheduleAutoGenerate({ immediate: true }); return; }
       btn.style.background='#ddeeff'; btn.style.boxShadow='0 0 4px 1px rgba(90,160,220,0.4)'; btn.dataset.selected='1';
-      pid = 1; persons = BUILTIN_PRESETS[name](); renderList(); scheduleAutoGenerate({ immediate: true });
+      pid = 1; persons = BUILTIN_PRESETS[name](); renderList(); setTemplateSelectedGuide(true); scheduleAutoGenerate({ immediate: true });
     };
     wrap.appendChild(btn);
   });
@@ -931,11 +1012,12 @@ function renderTemplateBtns() {
     chip.onclick = () => {
       const isSelected = chip.dataset.selected === '1';
       document.querySelectorAll('.preset-btn').forEach(b => { b.style.background = b.style.borderRadius?.includes('20px') ? '#f0fff4' : '#f0f6ff'; b.style.boxShadow='none'; b.dataset.selected=''; });
-      if (isSelected) { pid=1; persons=[mkPerson('本人','male')]; renderList(); scheduleAutoGenerate({ immediate: true }); return; }
+      if (isSelected) { pid=1; persons=[mkPerson('本人','male')]; renderList(); setTemplateSelectedGuide(false); scheduleAutoGenerate({ immediate: true }); return; }
       chip.style.background='#d0f0dc'; chip.style.boxShadow='0 0 4px 1px rgba(60,160,90,0.32)'; chip.dataset.selected='1';
       pid = Math.max(...t.persons.map(p=>p.id), 0) + 1;
       persons = t.persons.map(p => ({...p}));
       renderList();
+      setTemplateSelectedGuide(true);
       scheduleAutoGenerate({ immediate: true });
     };
     chip.appendChild(label); chip.appendChild(delBtn);
